@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "connect_metamask_backend": {
+      "main": "src/connect_metamask_backend/main.mo",
+      "type": "motoko"
+    },
+    "connect_metamask_frontend": {
+      "dependencies": [
+        "connect_metamask_backend"
+      ],
+      "source": [
+        "src/connect_metamask_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "connect_metamask_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
