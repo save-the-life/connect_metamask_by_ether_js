@@ -14,5 +14,8 @@
   "type": "module",
   "workspaces": [
     "src/connect_metamask_frontend"
-  ]
+  ],
+  "dependencies": {
+    "ethers": "^5.7.2"
+  }
 }

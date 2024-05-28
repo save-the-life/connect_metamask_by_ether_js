@@ -1,29 +1,48 @@
-import { useState } from 'react';
-import { connect_metamask_backend } from 'declarations/connect_metamask_backend';
+import React, { useState } from 'react';
+import { ethers } from 'ethers';
 
 function App() {
-  const [greeting, setGreeting] = useState('');
+  const [userAddress, setUserAddress] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    connect_metamask_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
+  //Connect Metamask by clicking button
+  const connectMetamask = async () => {
+    //Check if metamask extention exsits
+    if (window.ethereum) {
+      console.log("detected,,");
+
+      try{
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        console.log(accounts);
+        setUserAddress(accounts);
+      } catch(erro){
+        console.log("Error connecting,,,");
+      }
+    } else {
+      console.error('Metamask is not installed. Please install it to use this feature.');
+    }
+  };
+
+
+  // Connect wallet to interact with smart contract
+  async function connectWallet() {
+    if(typeof window.ethereum !== 'undefined'){
+      await connectMetamask();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      console.log(provider);
+      //use this provider for smart contract intercations
+    }
   }
 
   return (
     <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
+      <div>
+        <h1>Metamask Connection</h1>
+        <button onClick={connectMetamask}>
+          {userAddress ? `Connected: ${userAddress}` : 'Connect Metamask'}
+        </button>
+      </div>
     </main>
   );
 }
